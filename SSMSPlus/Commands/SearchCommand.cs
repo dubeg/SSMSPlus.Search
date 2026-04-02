@@ -1,17 +1,23 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+using System.ComponentModel.Design;
+using Microsoft.Extensions.DependencyInjection;
 using SSMSPlus.Core.Utils;
 using SSMSPlus.Search.Services;
 
-namespace SSMSPlus;
+namespace SSMSPlus.Commands;
 
-[Command(PackageIds.SearchCommand)]
-internal sealed class SearchCommand : BaseCommand<SearchCommand> {
-    protected override async Task ExecuteAsync(OleMenuCmdEventArgs e) {
+internal sealed class SearchCommand {
+    public static void Initialize(OleMenuCommandService commandService) {
+        var cmdId = new CommandID(PackageGuids.SSMSPlus, PackageIds.SearchCommand);
+        var menuCommand = new OleMenuCommand(Execute, cmdId);
+        commandService.AddCommand(menuCommand);
+    }
+
+    private static void Execute(object sender, EventArgs e) {
         try {
             var searchUi = SsmsPlusController.Instance.ServiceProvider.GetRequiredService<SearchUi>();
             searchUi.Execute();
         }
-        catch (Exception ex) { 
+        catch (Exception ex) {
             System.Windows.MessageBox.Show(ex.GetFullStackTraceWithMessage(), "Could not open Search Window");
         }
     }

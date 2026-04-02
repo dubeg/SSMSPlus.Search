@@ -1,9 +1,10 @@
-﻿global using System;
-global using Community.VisualStudio.Toolkit;
+global using System;
 global using Microsoft.VisualStudio.Shell;
 global using Task = System.Threading.Tasks.Task;
+using System.ComponentModel.Design;
 using System.Runtime.InteropServices;
 using System.Threading;
+using SSMSPlus.Commands;
 using SSMSPlus.Search.UI;
 
 namespace SSMSPlus;
@@ -13,9 +14,14 @@ namespace SSMSPlus;
 [ProvideMenuResource("Menus.ctmenu", 1)]
 [ProvideToolWindow(typeof(SearchToolWindow), Window = "00000000-0000-0000-0000-000000000002", MultiInstances = true, Transient = true)]
 [Guid(PackageGuids.SSMSPlusString)]
-public sealed class SSMSPlusPackage : ToolkitPackage {
+public sealed class SSMSPlusPackage : AsyncPackage {
     protected override async Task InitializeAsync(CancellationToken cancellationToken, IProgress<ServiceProgressData> progress) {
-        await this.RegisterCommandsAsync();
-        await SsmsPlusController.InitializeAsync(this, await this.GetServiceAsync<EnvDTE.DTE, EnvDTE80.DTE2>());
+        await JoinableTaskFactory.SwitchToMainThreadAsync(cancellationToken);
+
+        var dte = await GetServiceAsync(typeof(EnvDTE.DTE)) as EnvDTE80.DTE2;
+        var commandService = await GetServiceAsync(typeof(IMenuCommandService)) as OleMenuCommandService;
+        SearchCommand.Initialize(commandService);
+
+        await SsmsPlusController.InitializeAsync(this, dte);
     }
 }

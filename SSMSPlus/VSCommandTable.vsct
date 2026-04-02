@@ -4,12 +4,11 @@
   <Extern href="stdidcmd.h"/>
   <Extern href="vsshlids.h"/>
   <Include href="KnownImageIds.vsct"/>
-  <Include href="VSGlobals.vsct"/>
 
   <Commands package="SSMSPlus">
     <Groups>
       <Group guid="SSMSPlus" id="MyMenuGroup" priority="0x0600">
-        <Parent guid="VSMainMenu" id="Tools"/>
+        <Parent guid="guidSHLMainMenu" id="IDM_VS_MENU_TOOLS"/>
       </Group>
     </Groups>
 

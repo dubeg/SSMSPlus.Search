@@ -10,9 +10,9 @@ namespace SSMSPlus
     {
         public const string Id = "SSMSPlus.54c59ded-53cd-43d4-915a-6a304411353a";
         public const string Name = "SSMSPlus";
-        public const string Description = @"Empty VSIX Project.";
+        public const string Description = @"SSMS Plus for Visual Studio 2016";
         public const string Language = "en-US";
-        public const string Version = "1.10";
+        public const string Version = "1.15";
         public const string Author = "Company";
         public const string Tags = "";
         public const bool IsPreview = false;
